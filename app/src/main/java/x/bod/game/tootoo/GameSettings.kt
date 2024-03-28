@@ -1,11 +1,8 @@
 package x.bod.game.tootoo
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import kotlinx.coroutines.delay
-import java.util.Queue
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 object GameSettings {
     val over: Boolean
@@ -23,11 +20,23 @@ object GameSettings {
     val activePoints = mutableStateMapOf<Pair<Int, Int>, Boolean>()
     private val staticPoints = mutableStateMapOf<Pair<Int, Int>, Boolean>()
     private val operations = ArrayDeque<() -> Unit>()
+
+    private val fromCol = Random.nextInt(1..WIDTH / 2)
     private val shapes = arrayOf(
-        mapOf(-2 to 1 to true, -2 to 2 to true, -1 to 1 to true),
-        mapOf(-3 to 1 to true, -2 to 1 to true, -1 to 1 to true),
-        mapOf(-3 to 1 to true, -3 to 2 to true, -2 to 1 to true, -1 to 1 to true),
-        mapOf(-2 to 1 to true, -2 to 2 to true, -2 to 3 to true, -1 to 2 to true),
+        mapOf(-2 to fromCol + 1 to true, -2 to fromCol + 2 to true, -1 to fromCol + 1 to true),
+        mapOf(-3 to fromCol + 1 to true, -2 to fromCol + 1 to true, -1 to fromCol + 1 to true),
+        mapOf(
+            -3 to fromCol + 1 to true,
+            -3 to fromCol + 2 to true,
+            -2 to fromCol + 1 to true,
+            -1 to fromCol + 1 to true
+        ),
+        mapOf(
+            -2 to fromCol + 1 to true,
+            -2 to fromCol + 2 to true,
+            -2 to fromCol + 3 to true,
+            -1 to fromCol + 2 to true
+        ),
     )
     private var movePoints = newShape
     private val newShape: Map<Pair<Int, Int>, Boolean>
@@ -105,5 +114,19 @@ object GameSettings {
         activePoints.putAll(staticPoints)
         activePoints.putAll(movePoints)
         return true
+    }
+
+    private fun cleanBoxes() {
+        val frq = mutableMapOf<Int, Int>()
+        staticPoints.keys.forEach {
+            if (frq[it.first] == null) frq[it.first] = 1
+            frq[it.first] = frq[it.first]!! + 1
+        }
+        frq.forEach {
+            if (it.value == WIDTH) {
+                staticPoints.clear()
+                staticPoints.putAll(staticPoints.filter { pair -> pair.key.first != it.key })
+            }
+        }
     }
 }
