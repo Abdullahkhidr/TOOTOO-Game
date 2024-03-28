@@ -8,15 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -55,7 +49,7 @@ fun GameScreen() {
         GlobalScope.launch {
             do {
                 delay(400)
-                GameSettings.addOperationToQueue { GameSettings.shiftDown() }
+                GameSettings.addOperationToQueue { Movement.shiftDown() }
             } while (!GameSettings.over)
         }
         GlobalScope.launch {

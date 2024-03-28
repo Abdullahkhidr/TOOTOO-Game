@@ -17,11 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import x.bod.game.tootoo.GameSettings
+import x.bod.game.tootoo.Movement
 
 @Composable
 fun GameController() {
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .padding(20.dp)
@@ -29,13 +32,13 @@ fun GameController() {
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         ButtonAction(icon = Icons.Outlined.ArrowBack) {
-            GameSettings.addOperationToQueue { GameSettings.shiftLeft() }
+            GameSettings.addOperationToQueue { Movement.shiftLeft() }
         }
         ButtonAction(icon = Icons.Outlined.KeyboardArrowDown) {
-            GameSettings.addOperationToQueue { GameSettings.shiftDown() }
+            GameSettings.addOperationToQueue { Movement.shiftDown() }
         }
         ButtonAction(icon = Icons.Outlined.ArrowForward) {
-            GameSettings.addOperationToQueue { GameSettings.shiftRight() }
+            GameSettings.addOperationToQueue { Movement.shiftRight() }
         }
     }
 }
