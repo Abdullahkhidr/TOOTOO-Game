@@ -1,4 +1,4 @@
-package x.bod.game.tootoo
+package x.bod.game.tootoo.components
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -14,6 +14,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import x.bod.game.tootoo.GameSettings
 
 @Composable
 fun TOOBoard(

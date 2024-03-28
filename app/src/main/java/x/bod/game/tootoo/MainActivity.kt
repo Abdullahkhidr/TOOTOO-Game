@@ -4,19 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import x.bod.game.tootoo.components.GameController
+import x.bod.game.tootoo.components.TOOBoard
+import x.bod.game.tootoo.ui.theme.PrimaryColor
 import x.bod.game.tootoo.ui.theme.TOOTOOTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,51 +35,37 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
 fun GameScreen() {
     TOOTOOTheme {
-        Box {
-            TOOBoard(activePoints = GameSettings.activePoints)
-            Row(modifier = Modifier.fillMaxSize()) {
-                Box(modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .clickable {
-                        GameSettings.addOperationToQueue {
-                            GameSettings.shiftLeft()
-                        }
-                    }) {
-                }
-                Box(modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f)
-                    .clickable {
-                        GameSettings.addOperationToQueue {
-                            GameSettings.shiftRight()
-                        }
-                    }) {
-                }
+        Box(modifier = Modifier.background(PrimaryColor)) {
+            Column {
+                TOOBoard(
+                    activePoints = GameSettings.activePoints,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 20.dp, horizontal = 10.dp)
+                )
+                GameController()
             }
         }
     }
 
     remember {
         GlobalScope.launch {
-            while (true) {
-                delay(500)
+            do {
+                delay(400)
                 GameSettings.addOperationToQueue { GameSettings.shiftDown() }
-                Log.i("Operation: ", "Add Down Operation")
-            }
+            } while (!GameSettings.over)
         }
         GlobalScope.launch {
-            while (true) {
+            do {
                 delay(100)
                 GameSettings.doOperation()
-                Log.i("Operation: ", "Do Operation")
-            }
+                Log.i("Game: ", "Running")
+            } while (!GameSettings.over)
+            Log.i("Game: ", "Stopped")
         }
         ""
     }
 }
-
