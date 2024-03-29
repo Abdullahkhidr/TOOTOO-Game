@@ -21,9 +21,13 @@ object GameSettings {
     const val HEIGHT = 20
     const val WIDTH = 10
 
-    /**Positions of Active Points On The Board*/
+    /**Positions of Active Points On The Board. ([staticPoints] and [movePoints])*/
     val activePoints = mutableStateMapOf<Pair<Int, Int>, Boolean>()
+
+    /**Positions Of Active Points Without Falling Shape*/
     internal val staticPoints = mutableStateMapOf<Pair<Int, Int>, Boolean>()
+
+    /**Positions Of Points Of Falling Shape*/
     internal var movePoints = newShape
 
     /**Create Random Position To Falling off*/
