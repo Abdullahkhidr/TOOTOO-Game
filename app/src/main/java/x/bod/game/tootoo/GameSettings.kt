@@ -90,8 +90,7 @@ object GameSettings {
     internal val newShape: Map<Pair<Int, Int>, Boolean>
         get() {
             fromCol = Random.nextInt(1..WIDTH - 3)
-            shapes.shuffle()
-            return shapes.first()
+            return shapes[Random.nextInt(shapes.size)]
         }
 
     /**When the player moves the shape to the right or left at the same time as the fall occurs,
