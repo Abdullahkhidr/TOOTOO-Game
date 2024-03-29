@@ -6,11 +6,19 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import x.bod.game.tootoo.GameSettings
 import x.bod.game.tootoo.R
+import x.bod.game.tootoo.StatusGame
 
 @Composable
 fun GameStatusController() {
+    if (GameSettings.over) {
+        resumeGameDialog("Game Over", StatusGame.Over)
+    } else if (GameSettings.pause.value) {
+        resumeGameDialog("Pause", StatusGame.Pause)
+    }
     FilledTonalIconButton(
         onClick = {
             when {

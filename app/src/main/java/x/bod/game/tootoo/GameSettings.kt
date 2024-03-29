@@ -176,3 +176,7 @@ object GameSettings {
         }
     }
 }
+
+enum class StatusGame {
+    NotStarted, Over, Pause, Running
+}
