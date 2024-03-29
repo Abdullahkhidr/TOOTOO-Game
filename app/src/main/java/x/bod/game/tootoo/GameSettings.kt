@@ -1,5 +1,6 @@
 package x.bod.game.tootoo
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -29,25 +30,58 @@ object GameSettings {
 
 
     /**Create Random Position To Falling off*/
-    private val fromCol = Random.nextInt(1..WIDTH / 2)
+    private var fromCol = Random.nextInt(1..WIDTH - 3)
 
     /**Types of shapes*/
-    private val shapes = arrayOf(
-        mapOf(-2 to fromCol + 1 to true, -2 to fromCol + 2 to true, -1 to fromCol + 1 to true),
-        mapOf(-3 to fromCol + 1 to true, -2 to fromCol + 1 to true, -1 to fromCol + 1 to true),
-        mapOf(
-            -3 to fromCol + 1 to true,
-            -3 to fromCol + 2 to true,
-            -2 to fromCol + 1 to true,
-            -1 to fromCol + 1 to true
-        ),
-        mapOf(
-            -2 to fromCol + 1 to true,
-            -2 to fromCol + 2 to true,
-            -2 to fromCol + 3 to true,
-            -1 to fromCol + 2 to true
-        ),
-    )
+    private val shapes
+        get() = arrayOf(
+            /** Shape
+             * ▬▬
+             * ▬
+             * */
+            mapOf(-2 to fromCol + 1 to true, -2 to fromCol + 2 to true, -1 to fromCol + 1 to true),
+            /** Shape
+             *   ▬
+             * ▬▬
+             * */
+            mapOf(-1 to fromCol + 2 to true, -2 to fromCol + 2 to true, -1 to fromCol + 1 to true),
+            /** Shape
+             * ▬▬
+             *   ▬
+             * */
+            mapOf(-2 to fromCol + 1 to true, -2 to fromCol + 2 to true, -1 to fromCol + 2 to true),
+            /** Shape
+             * ▬▬▬
+             * */
+            mapOf(-1 to fromCol + 1 to true, -1 to fromCol + 2 to true, -1 to fromCol + 3 to true),
+            /** Shape
+             * ▬
+             * ▬
+             * ▬
+             * */
+            mapOf(-3 to fromCol + 1 to true, -2 to fromCol + 1 to true, -1 to fromCol + 1 to true),
+            /** Shape
+             * ▬▬
+             * ▬
+             * ▬
+             * */
+            mapOf(
+                -3 to fromCol + 1 to true,
+                -3 to fromCol + 2 to true,
+                -2 to fromCol + 1 to true,
+                -1 to fromCol + 1 to true
+            ),
+            /** Shape
+             * ▬▬▬
+             *   ▬
+             * */
+            mapOf(
+                -2 to fromCol + 1 to true,
+                -2 to fromCol + 2 to true,
+                -2 to fromCol + 3 to true,
+                -1 to fromCol + 2 to true
+            ),
+        )
 
     /**Positions Of Points Of Falling Shape*/
     internal var movePoints = newShape
@@ -55,6 +89,7 @@ object GameSettings {
     /**Choose Random Shape*/
     internal val newShape: Map<Pair<Int, Int>, Boolean>
         get() {
+            fromCol = Random.nextInt(1..WIDTH - 3)
             shapes.shuffle()
             return shapes.first()
         }
@@ -84,18 +119,19 @@ object GameSettings {
     /**Check if There is Complete Row (Every Points in this row is active)
      * and remove all points in this row from active points*/
     internal fun cleanBoxes() {
+        Log.i("Clean", "Clean Boxes")
         val frq = mutableMapOf<Int, Int>()
         staticPoints.keys.forEach {
-            if (frq[it.first] == null) frq[it.first] = 1
+            if (frq[it.first] == null) frq[it.first] = 0
             frq[it.first] = frq[it.first]!! + 1
         }
         frq.forEach {
             if (it.value == WIDTH) {
-                val temp = staticPoints
+                val temp = mutableMapOf<Pair<Int, Int>, Boolean>()
                 staticPoints.forEach { s ->
-                    if (s.key.first == it.key) temp.remove(s.key)
-                    else if (s.key.first < it.key) {
-                        temp.remove(s.key)
+                    if (s.key.first > it.key) {
+                        temp[s.key] = true
+                    } else if (s.key.first < it.key) {
                         temp[s.key.first + 1 to s.key.second] = true
                     }
                 }

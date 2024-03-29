@@ -41,13 +41,13 @@ object Movement {
             val pair = it.key.first + 1 to it.key.second
             if (pair.first > GameSettings.HEIGHT) {
                 GameSettings.staticPoints.putAll(GameSettings.movePoints)
-                GameSettings.cleanBoxes()
                 GameSettings.movePoints = GameSettings.newShape
                 return false
             }
             temp[pair] = true
         }
         if (GameSettings.staticPoints.keys.intersect(temp.keys).isNotEmpty()) {
+            GameSettings.addOperationToQueue { GameSettings.cleanBoxes() }
             GameSettings.staticPoints.putAll(GameSettings.movePoints)
             GameSettings.movePoints = GameSettings.newShape
             return false
