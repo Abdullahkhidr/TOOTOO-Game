@@ -115,7 +115,7 @@ object GameSettings {
     }
 
     /**It verifies that there are operations in the queue and then performs only the first operation*/
-    fun doOperation(): Boolean {
+    private fun doOperation(): Boolean {
         if (operations.isNotEmpty()) {
             operations.first().invoke()
             operations.removeFirst()
