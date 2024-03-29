@@ -2,10 +2,14 @@ package x.bod.game.tootoo
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import kotlin.random.Random
 import kotlin.random.nextInt
 
 object GameSettings {
+    /**If Game is Pause Then Stop Operations Until Resume*/
+    val pause = mutableStateOf(false)
+
     /** Check if Game is over*/
     val over: Boolean
         get() {

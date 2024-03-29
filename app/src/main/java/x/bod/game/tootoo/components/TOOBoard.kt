@@ -1,6 +1,5 @@
 package x.bod.game.tootoo.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -21,7 +20,6 @@ fun TOOBoard(
     activePoints: SnapshotStateMap<Pair<Int, Int>, Boolean>,
     modifier: Modifier = Modifier
 ) {
-    Log.i("board", "rebuild")
     Column(modifier = modifier.background(Color.White)) {
         for (i in 1..GameSettings.HEIGHT) {
             Row(Modifier.weight(1f)) {
@@ -30,12 +28,12 @@ fun TOOBoard(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
-                            .padding(0.2.dp)
+                            .padding(0.5.dp)
                             .background(
                                 if (activePoints.containsKey(i to j)) Color.Black else Color.White,
                                 shape = RoundedCornerShape(5.dp)
                             )
-                            .border(2.dp, Color(0xFFFAFAFA), RoundedCornerShape(5.dp))
+                            .border(2.dp, Color(0x3917C4B6), RoundedCornerShape(5.dp))
                     )
                 }
             }
