@@ -41,6 +41,7 @@ object Movement {
             val pair = it.key.first + 1 to it.key.second
             if (pair.first > GameSettings.HEIGHT) {
                 GameSettings.staticPoints.putAll(GameSettings.movePoints)
+                GameSettings.cleanBoxes()
                 GameSettings.movePoints = GameSettings.newShape
                 return false
             }

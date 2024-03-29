@@ -27,8 +27,6 @@ object GameSettings {
     /**Positions Of Active Points Without Falling Shape*/
     internal val staticPoints = mutableStateMapOf<Pair<Int, Int>, Boolean>()
 
-    /**Positions Of Points Of Falling Shape*/
-    internal var movePoints = newShape
 
     /**Create Random Position To Falling off*/
     private val fromCol = Random.nextInt(1..WIDTH / 2)
@@ -50,6 +48,9 @@ object GameSettings {
             -1 to fromCol + 2 to true
         ),
     )
+
+    /**Positions Of Points Of Falling Shape*/
+    internal var movePoints = newShape
 
     /**Choose Random Shape*/
     internal val newShape: Map<Pair<Int, Int>, Boolean>
@@ -82,7 +83,7 @@ object GameSettings {
 
     /**Check if There is Complete Row (Every Points in this row is active)
      * and remove all points in this row from active points*/
-    private fun cleanBoxes() {
+    internal fun cleanBoxes() {
         val frq = mutableMapOf<Int, Int>()
         staticPoints.keys.forEach {
             if (frq[it.first] == null) frq[it.first] = 1
@@ -90,8 +91,16 @@ object GameSettings {
         }
         frq.forEach {
             if (it.value == WIDTH) {
+                val temp = staticPoints
+                staticPoints.forEach { s ->
+                    if (s.key.first == it.key) temp.remove(s.key)
+                    else if (s.key.first < it.key) {
+                        temp.remove(s.key)
+                        temp[s.key.first + 1 to s.key.second] = true
+                    }
+                }
                 staticPoints.clear()
-                staticPoints.putAll(staticPoints.filter { pair -> pair.key.first != it.key })
+                staticPoints.putAll(temp)
                 refresh()
             }
         }
