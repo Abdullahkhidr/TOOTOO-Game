@@ -157,6 +157,7 @@ object GameSettings {
         activePoints.putAll(movePoints)
     }
 
+    /**Start/Restart Game*/
     internal fun start() {
         staticPoints.clear()
         operations.clear()
