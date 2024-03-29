@@ -21,11 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import x.bod.game.tootoo.components.GameController
+import x.bod.game.tootoo.components.GameStatusController
 import x.bod.game.tootoo.components.TOOBoard
 import x.bod.game.tootoo.ui.theme.PrimaryColor
 import x.bod.game.tootoo.ui.theme.TOOTOOTheme
@@ -44,14 +46,8 @@ fun GameScreen() {
     TOOTOOTheme {
         Box(modifier = Modifier.background(PrimaryColor)) {
             Column {
-                Row {
-                    FilledTonalIconButton(
-                        onClick = {}, colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = Color.White
-                        )
-                    ) {
-                        Icon(Icons.Outlined.PlayArrow, "Play Icon")
-                    }
+                Row(modifier = Modifier.padding(top = 15.dp, start = 15.dp)) {
+                    GameStatusController()
                 }
                 TOOBoard(
                     activePoints = GameSettings.activePoints,
@@ -63,22 +59,8 @@ fun GameScreen() {
             }
         }
     }
-
     remember {
-        GlobalScope.launch {
-            do {
-                delay(400)
-                GameSettings.addOperationToQueue { Movement.shiftDown() }
-            } while (!GameSettings.over)
-        }
-        GlobalScope.launch {
-            do {
-                delay(100)
-                GameSettings.doOperation()
-                Log.i("Game: ", "Running")
-            } while (!GameSettings.over)
-            Log.i("Game: ", "Stopped")
-        }
+        GameSettings.start()
         ""
     }
 }

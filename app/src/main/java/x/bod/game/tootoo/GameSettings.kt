@@ -3,6 +3,9 @@ package x.bod.game.tootoo
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -106,7 +109,9 @@ object GameSettings {
 
     /**Add New Operation To The Queue. like Shift Down, Shift Right and Shift Left*/
     fun addOperationToQueue(operation: () -> Unit) {
-        operations.addLast { operation() }
+        if (!pause.value) {
+            operations.addLast { operation() }
+        }
     }
 
     /**It verifies that there are operations in the queue and then performs only the first operation*/
@@ -150,5 +155,23 @@ object GameSettings {
         activePoints.clear()
         activePoints.putAll(staticPoints)
         activePoints.putAll(movePoints)
+    }
+
+    internal fun start() {
+        staticPoints.clear()
+        operations.clear()
+        movePoints = newShape
+        GlobalScope.launch {
+            do {
+                delay(400)
+                addOperationToQueue { Movement.shiftDown() }
+            } while (!over)
+        }
+        GlobalScope.launch {
+            do {
+                delay(100)
+                doOperation()
+            } while (!over)
+        }
     }
 }
